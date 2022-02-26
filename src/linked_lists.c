@@ -25,12 +25,13 @@ int main(void){
     append(&linked_list, 2);
     display(linked_list);
     append(&linked_list, 3);
+    addbeg(&linked_list, 5);
     display(linked_list);
     printf("Length: %i\n", len(linked_list));
-    printf("Index of 2: %i\n", in(linked_list, 2));
+    printf("Index of 2: %i\n", in(linked_list, 1));
     insert(&linked_list, 2, 4);
     display(linked_list);
-    delete(&linked_list, 2);
+    delete(&linked_list, 0);
     display(linked_list);
     dump(&linked_list);
 }
@@ -105,12 +106,16 @@ void display(struct node *root){
 
 void delete(struct node **root, int pos){
     struct node *temp = *root, *old = NULL;
+    if(pos == 0){
+        *root = temp->next;
+        free(temp);
+        return;
+    }
     for(int i = 0;i < pos; ++i){
         old = temp;
         temp = temp->next;
     }
-    if(old != NULL)
-        old->next = temp->next;
+    old->next = temp->next;
     free(temp);
 }
 
