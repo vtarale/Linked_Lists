@@ -9,7 +9,7 @@ struct node {
 void append(struct node **, int);
 void addbeg(struct node **, int);
 int len(struct node *);
-int index(struct node *, int);
+int in(struct node *, int);
 void insert(struct node **, int, int);
 void display(struct node *);
 void delete(struct node **, int);
@@ -20,7 +20,19 @@ int main(void){
     struct node *linked_list;
     linked_list = NULL;
 
-    
+    append(&linked_list, 1);
+    display(linked_list);
+    append(&linked_list, 2);
+    display(linked_list);
+    append(&linked_list, 3);
+    display(linked_list);
+    printf("Length: %i\n", len(linked_list));
+    printf("Index of 2: %i\n", in(linked_list, 2));
+    insert(&linked_list, 2, 4);
+    display(linked_list);
+    delete(&linked_list, 2);
+    display(linked_list);
+    dump(&linked_list);
 }
 
 void append(struct node **root, int data){
@@ -60,7 +72,7 @@ int len(struct node *root){
     return i;
 }
 
-int index(struct node *root, int data){
+int in(struct node *root, int data){
     int i = 0;
     while(root->data != data){
         ++i;
@@ -70,12 +82,8 @@ int index(struct node *root, int data){
 }
 
 void insert(struct node **root, int pos, int data){
-    struct node *temp, *old;
+    struct node *temp = *root, *old = NULL;
     for(int i = 0;i < pos; ++i){
-        if(i == 0){
-            temp = *root;
-            continue;
-        }
         old = temp;
         temp = temp->next;
     }
@@ -83,7 +91,8 @@ void insert(struct node **root, int pos, int data){
     newnode = (struct node *)malloc(sizeof(struct node));
     newnode->data = data;
     newnode->next = temp;
-    old->next = newnode;
+    if(old != NULL)
+        old->next = newnode;
 }
 
 void display(struct node *root){
@@ -95,16 +104,13 @@ void display(struct node *root){
 }
 
 void delete(struct node **root, int pos){
-    struct node *temp, *old;
+    struct node *temp = *root, *old = NULL;
     for(int i = 0;i < pos; ++i){
-        if(i == 0){
-            temp = *root;
-            continue;
-        }
         old = temp;
         temp = temp->next;
     }
-    old->next = temp->next;
+    if(old != NULL)
+        old->next = temp->next;
     free(temp);
 }
 
